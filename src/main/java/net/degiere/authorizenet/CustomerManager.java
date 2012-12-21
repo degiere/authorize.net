@@ -1,10 +1,15 @@
 package net.degiere.authorizenet;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import net.authorize.Merchant;
 import net.authorize.cim.Result;
 import net.authorize.cim.Transaction;
 import net.authorize.cim.TransactionType;
 import net.authorize.data.cim.CustomerProfile;
+import net.authorize.data.cim.PaymentProfile;
+import net.authorize.data.xml.Payment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +76,29 @@ public class CustomerManager {
 			throw new AuthorizeNetRuntimeException(result.getMessages().iterator().next());
 		}
 	}
+	
+	public String createCustomerPaymentProfile(String customerProfileId, PaymentProfile paymentProfile) {
+		log.info("creating payment: {}", paymentProfile);
+		Merchant merchant = merchantManager.getMerchant();
+		Transaction tran = merchant.createCIMTransaction(TransactionType.CREATE_CUSTOMER_PAYMENT_PROFILE);
+		tran.setCustomerProfileId(customerProfileId);
+		tran.setPaymentProfileList(asList(paymentProfile));
+        Result<Transaction> result = post(merchant, tran);
+		if (isSuccessful(result)) {
+			return result.getCustomerPaymentProfileIdList().iterator().next();
+		} else {
+			throw new AuthorizeNetRuntimeException(result.getMessages().iterator().next());
+		}
+	}
+	
+	public static ArrayList<PaymentProfile> asList(PaymentProfile paymentProfile) {
+		return new ArrayList<PaymentProfile>(Arrays.asList(new PaymentProfile[] { paymentProfile }));
+	}
 
+	public static ArrayList<Payment> asList(Payment payment) {
+		return new ArrayList<Payment>(Arrays.asList(new Payment[] { payment }));
+	}
+	
 	private Result<Transaction> post(Merchant merchant, Transaction transaction) {
 		return (Result<Transaction>) merchant.postTransaction(transaction);
 	}

@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.util.Properties;
 
 import net.authorize.data.cim.CustomerProfile;
+import net.authorize.data.cim.PaymentProfile;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -68,9 +69,19 @@ public class CustomerManagerIntegrationTest {
 		String id = createCustomerProfileForTest();
 		customerManager.deleteCustomerProfile(id);
 	}
+	
+	@Test
+	public void createsPaymentProfile() {
+		CustomerProfile customer = TestData.testCustomerProfile(baseEmail);
+		String customerId = customerManager.createCustomerProfile(customer);
+		PaymentProfile paymentProfile = TestData.testPaymentProfile(customer.getMerchantCustomerId());
+		String paymentProfileId = customerManager.createCustomerPaymentProfile(customerId, paymentProfile);
+		assertNotNull(paymentProfileId);
+		customerManager.deleteCustomerProfile(customerId); 
+	}
 
 	private CustomerProfile testCustomerProfile() {
-		return CustomerProfileHelper.testCustomerProfile(baseEmail);
+		return TestData.testCustomerProfile(baseEmail);
 	}
 	
 	private String createCustomerProfileForTest() {
