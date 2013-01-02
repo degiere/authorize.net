@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Properties;
 
+import net.authorize.Environment;
 import net.authorize.TransactionType;
 import net.authorize.data.Order;
 import net.authorize.data.cim.CustomerProfile;
@@ -28,7 +29,8 @@ public class CustomerManagerIntegrationTest {
 	
 	public CustomerManagerIntegrationTest() {
 		Properties props = PropertiesLoader.load("authorizenet.properties");
-		MerchantManager merchantManager = new MerchantManager(props.getProperty("login"), props.getProperty("transactionKey"));
+		Environment env = MerchantManager.environment(props.getProperty("environment"));
+		merchantManager = new MerchantManager(props.getProperty("login"), props.getProperty("transactionKey"), env);
 		customerManager = new CustomerManager();
 		customerManager.setMerchantManager(merchantManager);
 		baseEmail = props.getProperty("test.email");

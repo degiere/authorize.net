@@ -9,11 +9,18 @@ public class MerchantManager {
 	public String transactionKey;
 	public Merchant merchant;
 	
-	public MerchantManager(String login, String transactionKey) {
+	public MerchantManager(String login, String transactionKey, Environment env) {
 		this.login = login;
 		this.transactionKey = transactionKey;
-		// TODO: revisit environment
-		this.merchant = Merchant.createMerchant(Environment.SANDBOX, login, transactionKey);
+		this.merchant = Merchant.createMerchant(env, login, transactionKey);
+	}
+	
+	public static Environment environment(String environment) {
+		if ("production".equals(environment)) {
+			return Environment.PRODUCTION;
+		} else {
+			return Environment.SANDBOX;
+		}
 	}
 	
 	public Merchant getMerchant() {

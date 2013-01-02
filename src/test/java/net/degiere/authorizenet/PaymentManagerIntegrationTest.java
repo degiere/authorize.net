@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Properties;
 import java.util.Random;
 
+import net.authorize.Environment;
 import net.authorize.aim.Result;
 import net.authorize.aim.Transaction;
 import net.authorize.data.Customer;
@@ -25,7 +26,8 @@ public class PaymentManagerIntegrationTest {
 	
 	public PaymentManagerIntegrationTest() {
 		Properties props = PropertiesLoader.load("authorizenet.properties");
-		merchantManager = new MerchantManager(props.getProperty("login"), props.getProperty("transactionKey"));
+		Environment env = MerchantManager.environment(props.getProperty("environment"));
+		merchantManager = new MerchantManager(props.getProperty("login"), props.getProperty("transactionKey"), env);
 		paymentService = new PaymentManager();
 		paymentService.setMerchantManager(merchantManager);
 	}
