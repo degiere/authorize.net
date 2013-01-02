@@ -23,6 +23,14 @@ public class MerchantManagerTest {
 		assertNotNull(merchant);
 		assertNotNull(merchant.getLogin());
 		assertNotNull(merchant.getTransactionKey());
+		assertNotNull(merchant.getEnvironment());
+	}
+	
+	@Test
+	public void environment() {
+		Properties props = PropertiesLoader.load("authorizenet.properties");
+		Environment env = MerchantManager.environment(props.getProperty("environment"));
+		assertNotNull(env);
 	}
 
 }

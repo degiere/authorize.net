@@ -17,3 +17,8 @@ login=<login>
 transactionKey=<transaction key>
 mode=production
 test.email=yourtestemail@yourdomain.com
+
+Running unit tests
+==================
+$ mvn test
+$ mvn -Dtest=CustomerManagerIntegrationTest test

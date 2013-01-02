@@ -16,6 +16,7 @@ public class PropertiesLoaderTest {
 		assertNotNull(props.getProperty("login"));
 		assertNotNull(props.getProperty("transactionKey"));
 		assertNotNull(props.getProperty("test.email"));
+		assertNotNull(props.getProperty("mode"));
 	}
 
 }
