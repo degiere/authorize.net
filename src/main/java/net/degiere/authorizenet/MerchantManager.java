@@ -13,7 +13,7 @@ public class MerchantManager {
 		this.login = login;
 		this.transactionKey = transactionKey;
 		// TODO: revisit environment
-		this.merchant = Merchant.createMerchant(Environment.SANDBOX_TESTMODE, login, transactionKey);
+		this.merchant = Merchant.createMerchant(Environment.SANDBOX, login, transactionKey);
 	}
 	
 	public Merchant getMerchant() {
