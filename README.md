@@ -22,3 +22,4 @@ Running unit tests
 ==================
 $ mvn test
 $ mvn -Dtest=CustomerManagerIntegrationTest test
+
