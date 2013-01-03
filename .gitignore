@@ -1,5 +1,17 @@
+# java build
 *.class
 
 # Package Files #
 *.war
 *.ear
+
+# maven
+target
+
+# eclipse
+.classpath
+.project
+.settings
+
+# local configs
+src/main/resources/authorizenet.properties
