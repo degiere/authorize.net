@@ -20,6 +20,6 @@ test.email=yourtestemail@yourdomain.com
 
 Running unit tests
 ==================
-$ mvn test
-$ mvn -Dtest=CustomerManagerIntegrationTest test
+* mvn test
+* mvn -Dtest=CustomerManagerIntegrationTest test
 
