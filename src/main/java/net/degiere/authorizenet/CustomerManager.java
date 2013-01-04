@@ -1,5 +1,6 @@
 package net.degiere.authorizenet;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +13,7 @@ import net.authorize.data.ShippingAddress;
 import net.authorize.data.cim.CustomerProfile;
 import net.authorize.data.cim.PaymentProfile;
 import net.authorize.data.cim.PaymentTransaction;
+import net.authorize.data.xml.Address;
 import net.authorize.data.xml.Payment;
 
 import org.slf4j.Logger;
@@ -52,7 +54,11 @@ public class CustomerManager {
 	 * @return
 	 */
 	public String createCustomerPaymentProfile(String customerProfileId, PaymentProfile paymentProfile) {
-		log.info("creating payment profile: {}", paymentProfile);
+		Address address = paymentProfile.getBillTo();
+		String name = address.getFirstName() + " " + address.getLastName();
+		Payment payment = paymentProfile.getPaymentList().iterator().next();
+		String last4 = last4(payment.getCreditCard().getCreditCardNumber());
+		log.info("creating payment profile for customer: {} and card last 4: {}", name, last4);
 		Merchant merchant = merchantManager.getMerchant();
 		Transaction tran = merchant.createCIMTransaction(TransactionType.CREATE_CUSTOMER_PAYMENT_PROFILE);
 		tran.setCustomerProfileId(customerProfileId);
@@ -70,7 +76,9 @@ public class CustomerManager {
 	}
 	
 	public void createCustomerProfileTransaction(String customerProfileId, String paymentProfileId, PaymentTransaction transaction) {
-		log.info("creating transaction: {}", transaction);
+		String id = transaction.getCustomerPaymentProfileId();
+		BigDecimal amount = transaction.getOrder().getTotalAmount();
+		log.info("creating transaction for payment profile: {} and amount: {}", id, amount);
 		Merchant merchant = merchantManager.getMerchant();
 		Transaction tran = merchant.createCIMTransaction(TransactionType.CREATE_CUSTOMER_PROFILE_TRANSACTION);
 		tran.setCustomerProfileId(customerProfileId);
@@ -202,6 +210,10 @@ public class CustomerManager {
 	
 	private static boolean isSuccessful(Result<Transaction> result) {
 		return "Ok".equals(result.getResultCode());
+	}
+	
+	private static String last4(String card) {
+		return card.substring(card.length() - 4, card.length());
 	}
 
 }
